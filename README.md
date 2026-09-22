@@ -1,6 +1,7 @@
 # Secure Calculator
 
-A production-oriented Python command-line calculator built around strict input validation,
+A production-oriented Python calculator with command-line, interactive-menu, and optional
+Tkinter desktop interfaces, built around strict input validation,
 bounded decimal arithmetic, typed extension points, structured errors, privacy-conscious
 logging, automated tests, and a non-root container image.
 
@@ -18,15 +19,21 @@ secure-calculator/
 │   ├── __main__.py
 │   ├── cli.py
 │   ├── errors.py
+│   ├── gui.py
+│   ├── gui_model.py
+│   ├── interactive.py
 │   ├── logging_config.py
 │   ├── models.py
 │   ├── operations.py
+│   ├── presentation.py
 │   ├── py.typed
 │   ├── registry.py
 │   ├── service.py
 │   └── validation.py
 ├── tests/
 │   ├── test_cli.py
+│   ├── test_gui_model.py
+│   ├── test_interactive.py
 │   ├── test_operations.py
 │   ├── test_security_properties.py
 │   ├── test_service.py
@@ -85,6 +92,32 @@ python -m pip install -e ".[dev]"
 ```
 
 ## Usage
+
+### Interactive menu
+
+For a beginner-friendly numbered menu similar to a traditional classroom calculator:
+
+```bash
+secure-calculator-menu
+```
+
+Choose an operation, enter two numbers, and continue calculating until you select `Q`.
+
+### Desktop interface
+
+Launch the button-based Tkinter calculator:
+
+```bash
+secure-calculator-gui
+```
+
+Enter one operation at a time, such as `0.1 + 0.2`, by using the buttons or keyboard and
+press `=` or Enter. The GUI strictly parses the expression and delegates to the same secure
+calculator service; it never uses Python's `eval` or executes arbitrary input. Tkinter is
+included with standard Windows and macOS Python installations, while some Linux distributions
+provide it as a separate system package.
+
+### Direct command
 
 ```bash
 secure-calculator add 12.5 7.5

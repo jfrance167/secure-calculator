@@ -3,8 +3,9 @@ import logging
 
 import pytest
 
-from secure_calculator.cli import MAX_PLAIN_OUTPUT_CHARACTERS, _format_decimal, build_parser, main
+from secure_calculator.cli import _format_decimal, build_parser, main
 from secure_calculator.logging_config import JsonFormatter, configure_logging
+from secure_calculator.presentation import MAX_PLAIN_OUTPUT_CHARACTERS
 
 
 def test_cli_prints_result(capsys: pytest.CaptureFixture[str]) -> None:

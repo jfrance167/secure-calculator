@@ -31,6 +31,8 @@ dev = [
 
 [project.scripts]
 secure-calculator = "secure_calculator.cli:main"
+secure-calculator-menu = "secure_calculator.interactive:main"
+secure-calculator-gui = "secure_calculator.gui:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -45,6 +47,7 @@ testpaths = ["tests"]
 [tool.coverage.run]
 branch = true
 source = ["secure_calculator"]
+omit = ["src/secure_calculator/gui.py"]
 
 [tool.coverage.report]
 exclude_also = [
