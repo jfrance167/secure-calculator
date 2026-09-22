@@ -34,6 +34,7 @@ secure-calculator/
 ├── .dockerignore
 ├── .gitignore
 ├── Dockerfile
+├── LICENSE
 ├── compose.yaml
 ├── pyproject.toml
 └── README.md
@@ -103,6 +104,16 @@ secure-calculator divide 10 0 --json
 # {"error": {"code": "division_by_zero", "message": "division by zero is undefined"}}
 ```
 
+### Arithmetic semantics
+
+- Modulo uses the General Decimal Arithmetic convention: the remainder has the sign of the
+  dividend. Consequently, `modulo -7 3` returns `-1`, unlike Python integer `-7 % 3`.
+- `0` raised to the power `0` is undefined under the decimal arithmetic specification and
+  returns the `arithmetic_domain` error rather than `1`.
+- Results that would require more than 256 characters in ordinary fixed-point notation are
+  emitted in scientific notation. For example, `1E-9999` remains `1E-9999` rather than
+  expanding into a roughly 10,000-character line.
+
 ### Library API
 
 ```python
@@ -161,3 +172,7 @@ update process and publish images by immutable digest.
 
 Do not pass secrets as operands. Although operand values are intentionally excluded from
 application logs, command-line arguments may be visible to operating-system process tools.
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE).

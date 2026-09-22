@@ -12,14 +12,26 @@ from secure_calculator.operations import default_operations
 from secure_calculator.service import Calculator
 
 LOGGER = logging.getLogger("secure_calculator")
+MAX_PLAIN_OUTPUT_CHARACTERS = 256
+
+
+def _format_scientific(value: Decimal) -> str:
+    mantissa, exponent = format(value, "E").split("E", maxsplit=1)
+    if "." in mantissa:
+        mantissa = mantissa.rstrip("0").rstrip(".")
+    return f"{mantissa}E{int(exponent):+d}"
 
 
 def _format_decimal(value: Decimal) -> str:
     if value.is_zero():
         return "0"
+    if abs(value.adjusted()) >= MAX_PLAIN_OUTPUT_CHARACTERS:
+        return _format_scientific(value)
     rendered = format(value, "f")
     if "." in rendered:
         rendered = rendered.rstrip("0").rstrip(".")
+    if len(rendered) > MAX_PLAIN_OUTPUT_CHARACTERS:
+        return _format_scientific(value)
     return rendered
 
 

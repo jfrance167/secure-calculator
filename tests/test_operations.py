@@ -2,6 +2,7 @@ from decimal import Decimal
 
 import pytest
 
+from secure_calculator import Calculator
 from secure_calculator.errors import ArithmeticDomainError, DivisionByZeroError
 from secure_calculator.operations import (
     Add,
@@ -51,6 +52,19 @@ def test_zero_to_negative_power_is_rejected() -> None:
         Power().execute(Decimal("0"), Decimal("-1"))
 
 
+def test_zero_to_zero_power_is_a_domain_error() -> None:
+    with pytest.raises(ArithmeticDomainError):
+        Calculator().calculate({"operation": "power", "left": "0", "right": "0"})
+
+
+@pytest.mark.parametrize(
+    ("left", "right", "expected"),
+    [("-7", "3", "-1"), ("7", "-3", "1"), ("-7", "-3", "-1")],
+)
+def test_modulo_result_follows_dividend_sign(left: str, right: str, expected: str) -> None:
+    assert Modulo().execute(Decimal(left), Decimal(right)) == Decimal(expected)
+
+
 def test_default_operations_are_complete() -> None:
     assert {operation.name for operation in default_operations()} == {
         "add",
@@ -60,4 +74,3 @@ def test_default_operations_are_complete() -> None:
         "modulo",
         "power",
     }
-

@@ -46,6 +46,12 @@ def test_parse_decimal_rejects_malformed_or_dangerous_values(raw: object) -> Non
         parse_decimal(raw, "value")
 
 
+@pytest.mark.parametrize("raw", [Decimal("NaN"), Decimal("Infinity"), Decimal("-Infinity")])
+def test_parse_decimal_rejects_non_finite_decimal_instances(raw: Decimal) -> None:
+    with pytest.raises(ValidationError, match="finite"):
+        parse_decimal(raw, "value")
+
+
 def test_parse_request_normalizes_operation() -> None:
     request = parse_request({"operation": " ADD ", "left": "1", "right": "2"})
     assert request.operation == "add"

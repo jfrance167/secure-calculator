@@ -3,7 +3,7 @@ import logging
 
 import pytest
 
-from secure_calculator.cli import _format_decimal, build_parser, main
+from secure_calculator.cli import MAX_PLAIN_OUTPUT_CHARACTERS, _format_decimal, build_parser, main
 from secure_calculator.logging_config import JsonFormatter, configure_logging
 
 
@@ -55,6 +55,19 @@ def test_decimal_formatting(raw: str, expected: str) -> None:
     assert _format_decimal(Decimal(raw)) == expected
 
 
+@pytest.mark.parametrize(
+    ("raw", "expected"),
+    [("1E-9999", "1E-9999"), ("1.2300E+9999", "1.23E+9999")],
+)
+def test_extreme_values_use_bounded_scientific_notation(raw: str, expected: str) -> None:
+    from decimal import Decimal
+
+    rendered = _format_decimal(Decimal(raw))
+
+    assert rendered == expected
+    assert len(rendered) <= MAX_PLAIN_OUTPUT_CHARACTERS
+
+
 def test_json_formatter_uses_allowlisted_fields() -> None:
     record = logging.LogRecord("test", logging.WARNING, __file__, 1, "safe", (), None)
     record.sensitive_value = "must-not-appear"
@@ -73,4 +86,3 @@ def test_configure_logging_is_idempotent() -> None:
         assert len(logger.handlers) == 1
     finally:
         logger.handlers[:] = original_handlers
-
