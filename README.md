@@ -13,6 +13,7 @@ two decimal operands.
 
 ```text
 secure-calculator/
+├── .github/dependabot.yml
 ├── .github/workflows/test.yml
 ├── src/secure_calculator/
 │   ├── __init__.py
@@ -44,7 +45,8 @@ secure-calculator/
 ├── LICENSE
 ├── compose.yaml
 ├── pyproject.toml
-└── README.md
+├── README.md
+└── SECURITY.md
 ```
 
 ## Features and security controls
