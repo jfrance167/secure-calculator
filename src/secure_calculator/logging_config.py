@@ -10,7 +10,9 @@ from typing import Any
 class JsonFormatter(logging.Formatter):
     """Emit stable JSON records containing only approved fields."""
 
-    converter = time.gmtime
+    def converter(self, timestamp: float | None) -> time.struct_time:
+        """Convert a logging timestamp to UTC with an explicit stable type."""
+        return time.gmtime(timestamp)
 
     def format(self, record: logging.LogRecord) -> str:
         event: dict[str, Any] = {
